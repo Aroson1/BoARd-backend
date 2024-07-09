@@ -1,3 +1,4 @@
+const { sendResponse } = require("../config/core");
 const db = require("../models");
 const Player = db.players;
 
@@ -9,7 +10,7 @@ const saveUser = async (req, res, next) => {
       },
     });
     if (username) {
-      return res.status(409).json({ message: "Username already taken" });
+      return sendResponse(res, 409, null, "Username already registered");
     }
 
     const emailcheck = await Player.findOne({
@@ -19,13 +20,13 @@ const saveUser = async (req, res, next) => {
     });
 
     if (emailcheck) {
-      return res.status(409).json({ message: "Email already registered" });
+      return sendResponse(res, 409, null, "Email already registered");
     }
 
     next();
   } catch (error) {
     console.log(error);
-    res.status(500).json({ message: "An error occurred" });
+    return sendResponse(res, 500, null, "Internal server error");
   }
 };
 

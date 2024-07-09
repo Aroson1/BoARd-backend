@@ -73,10 +73,10 @@ const deleteGameRoom = async (req, res) => {
 
     if (gameRoom) {
       await gameRoom.destroy();
-      return res.status(200).send("Game room deleted successfully");
+      return sendResponse(res, 200, null, "Game room deleted successfully");
     }
 
-    return res.status(404).send("Game room not found");
+    return sendResponse(res, 404, null, "Game room not found");
   } catch (error) {
     log(error, "error");
     return sendResponse(res, 500, null, "Internal server error");
@@ -89,10 +89,10 @@ const joinGameRoom = async (req, res) => {
     const gameRoom = await db.gamerooms.findOne({ where: { id: room_id } });
     if (gameRoom) {
       const activePlayerIds = gameRoom.active_player_ids;
-      if (activePlayerIds.length < gameRoom.max_players)
-        return res.status(400).send("Game room is full");
+      if (activePlayerIds.length == gameRoom.max_players)
+        return sendResponse(res, 400, null, "Game room is full");
       if (activePlayerIds.indexOf(user_id) !== -1)
-        return res.status(400).send("You are already in the game room");
+        return sendResponse(res, 400, null, "You have already joined the game room");
 
       const registeredPlayerIds = gameRoom.registered_player_ids;
 
@@ -100,16 +100,12 @@ const joinGameRoom = async (req, res) => {
         activePlayerIds.push(user_id);
         gameRoom.active_player_ids = activePlayerIds;
         await gameRoom.save();
-        return res
-          .status(200)
-          .send("You have successfully joined the game room");
+        return sendResponse(res, 200, gameRoom, "You have successfully joined the game room");
       } else {
-        return res
-          .status(400)
-          .send("You need to register in the game room first");
+        return sendResponse(res, 400, null, "You are not registered in the game room");
       }
     } else {
-      return res.status(404).send("Game room not found");
+      return sendResponse(res, 404, null, "Game room not found");
     }
   } catch (error) {
     log(error, "error");
@@ -130,9 +126,9 @@ const leaveGameRoom = async (req, res) => {
       }
       gameRoom.active_player_ids = activePlayerIds;
       await gameRoom.save();
-      return res.status(200).send("You have successfully left the game room");
+      return sendResponse(res, 200, null, "You have successfully left the game room");
     } else {
-      return res.status(404).send("Game room not found");
+      return sendResponse(res, 404, null, "Game room not found");
     }
   } catch (error) {
     log(error, "error");
@@ -154,7 +150,7 @@ const registerInGameRoom = async (req, res) => {
         .status(200)
         .send("You have successfully registered in the game room");
     } else {
-      return res.status(404).send("Game room not found");
+      return sendResponse(res, 404, null, "Game room not found");
     }
   } catch (error) {
     log(error, "error");

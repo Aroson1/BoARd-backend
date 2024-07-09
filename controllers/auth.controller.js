@@ -24,10 +24,11 @@ const signup = async (req, res) => {
       console.log(token);
       return res.status(201).send({ user, token });
     } else {
-      return res.status(409).send("Details are not correct");
+      return sendResponse(res, 400, null, "Failed to create user");
     }
   } catch (error) {
     console.log(error);
+    return sendResponse(res, 500, null, "Internal server error");
   }
 };
 
@@ -56,14 +57,14 @@ const login = async (req, res) => {
         console.log(token);
         return res.status(201).send({user, token});
       } else {
-        return res.status(401).send("Authentication inner");
+        return sendResponse(res, 401, null, "Authentication failed");
       }
     } else {
-      return res.status(401).send("Authentication failed");
+      return sendResponse(res, 404, null, "User not found");
     }
   } catch (error) {
     console.log(error);
-    return res.status(500).send("Internal server error");
+    return sendResponse(res, 500, null, "Internal server error");
   }
 };
 

@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const { log } = require("../config/core");
+const { log, sendResponse } = require("../config/core");
 
 const authenticate = async (req, res, next) => {
   const authHeader = req.header("Authorization");
@@ -18,7 +18,7 @@ const authenticate = async (req, res, next) => {
     log(req.body.user_id, "info", "green");
     next();
   } catch (err) {
-    return res.status(401).json({ message: "Invalid token." });
+    return sendResponse(res, 401, null, "Invalid token");
   }
 };
 
