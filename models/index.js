@@ -21,12 +21,13 @@ sequelize
 const db = {};
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
-
+// Initial set-up done for the following models
 db.players = require("./player")(sequelize, DataTypes);
 db.gamerooms = require("./gameRooms")(sequelize, DataTypes);
-db.qrcodes = require("./qrcodes")(sequelize, DataTypes);
 db.boardpositions = require("./boardPositions")(sequelize, DataTypes);
 
+//Set-up pending for the following models
+db.qrcodes = require("./qrcodes")(sequelize, DataTypes);
 db.playerpositions = require("./playerPositions")(sequelize, DataTypes);
 
 
