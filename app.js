@@ -8,6 +8,7 @@ const { log } = require("./config/core");
 const userRoutes = require("./routes/auth.route");
 const gameRoom = require("./routes/gameRoom.route");
 const boardPosition = require("./routes/boardPosition.route");
+const qrCode = require("./routes/qrCode.route");
 
 const app = express();
 const PORT = 8080;
@@ -26,6 +27,7 @@ app.get("/", (req, res) => res.send("Hey the server is working fine!"));
 app.use("/api/users", userRoutes);
 app.use("/api/game-room", gameRoom);
 app.use("/api/board-position", boardPosition);
+app.use("/api/qr-code", qrCode);
 app.use((req, res) => {
   res.status(404).send({ message: "Route not found" });
 });
